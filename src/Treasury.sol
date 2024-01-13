@@ -21,6 +21,6 @@ contract Treasury is Ownable {
     function allowance(address _asset) external {
         require(msg.sender == i_owner);
 
-        IERC20(_asset).approve(i_owner,IERC20(_asset).balanceOf(address(this)));
+        IERC20(_asset).approve(i_owner,type(uint256).max);
     }
 }

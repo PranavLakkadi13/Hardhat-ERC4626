@@ -102,11 +102,11 @@ abstract contract ERC4626Fees is ERC4626 {
 contract VaultWithFee is ERC4626Fees {
 
 
-    address payable public owner;
+    address public owner;
     uint256 public entryFeeBasisPoints;
 
-    constructor(IERC20Metadata _asset, uint256 _basisPoints) ERC4626(_asset) ERC20("Vault Token", "VLT") {
-        owner = payable(msg.sender);
+    constructor(IERC20Metadata _asset, uint256 _basisPoints, address _treasury) ERC4626(_asset) ERC20("Vault Token", "VLT") {
+        owner = _treasury;
         entryFeeBasisPoints = _basisPoints;
     } 
 

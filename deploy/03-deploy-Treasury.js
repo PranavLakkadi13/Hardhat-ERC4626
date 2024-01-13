@@ -5,21 +5,19 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const chainId = network.config.chainId;
 
-  const Vault = await deployments.get("Asset")
+  const args = [];
 
-  const args = [Vault.address];
-
-  log("Deploying the Vault......")
-  const VaultContract = await deploy("VaultContract", {
+  log("Deploying the Treasury......")
+  const Treasury = await deploy("Treasury", {
     from: deployer,
     args: args,
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
 
-  log("Vault Deployed SuccessFully....")
+  log("Treasury Deployed SuccessFully....")
   log("----------------------------------------------------------------")
 
 };
 
-module.exports.tags = ["Vault","all"];
+module.exports.tags = ["Treasury","all"];
