@@ -5,6 +5,7 @@ require("solidity-coverage");
 require("hardhat-gas-reporter");
 require("hardhat-contract-sizer");
 require("@nomicfoundation/hardhat-network-helpers");
+require("@nomicfoundation/hardhat-foundry");
 require("dotenv").config();
 
 const RPC_URL_Alchemy_SEPOLIA = process.env.RPC_URL_Alchemy_SEPOLIA;
