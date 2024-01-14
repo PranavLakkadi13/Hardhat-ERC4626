@@ -25,4 +25,27 @@ contract AssetTest is Test {
         uint256 x = asset.balanceOf(bob);
         assertEq(x, 1e23);
     }
+
+    function testTransfer() public {
+        vm.prank(bob);
+        asset.transfer(alice,1e18);
+    }
+
+    function testFailTransfer() public {
+        asset.transfer(alice,1e12);
+    }
+
+    function testApprove() public {
+        vm.prank(bob);
+        asset.approve(alice, 11e18);
+    }
+
+    function testAllowanceSpend() public {
+        vm.prank(bob);
+        asset.approve(alice, 11e18);
+        vm.prank(alice);
+        asset.transferFrom(bob, alice, 8e18);
+        uint256 x = asset.balanceOf(alice);
+        assertEq(x, 8e18);
+    }
 }

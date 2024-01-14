@@ -17,7 +17,38 @@ contract VaultTest is Test {
     function setUp() public {
         vm.startPrank(bob);
         asset = new Asset();
-        vault = new VaultContract(asset);
         vm.stopPrank();
+        vault = new VaultContract((asset));
     }
+
+    function testTranferAsset() public {
+        vm.prank(bob);
+        asset.transfer(alice, 1);
+    }
+
+    function testApproveAssetToVault() public {
+        vm.prank(bob);
+        asset.approve(address(vault), 10e18);
+    }
+
+    function testTransferTokensfromAsset() public {
+        vm.prank(bob);
+        asset.approve(address(vault), 10e18);
+
+        vm.prank(bob);
+        vault.deposit(10e18, address(vault));
+    }
+
+    function testTokenDepositAndBalanceUpdate() public {
+        assertEq(vault.totalSupply(),0);
+        
+        vm.prank(bob);
+        asset.approve(address(vault), 10e18);
+
+        vm.prank(bob);
+        vault.deposit(10e18, address(vault));
+
+        assertEq(vault.totalSupply(),10e18);
+    }
+
 }
