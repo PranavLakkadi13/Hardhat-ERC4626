@@ -18,9 +18,11 @@ contract Treasury is Ownable {
         require(ok);
     }
 
-    function allowance(address _asset) external {
+    function allowanceSpend(address _asset) external {
         require(msg.sender == i_owner);
 
-        IERC20(_asset).approve(i_owner,type(uint256).max);
+        IERC20(_asset).transfer(i_owner,IERC20(_asset).balanceOf(address(this)));
     }
+
+    receive() external payable {}
 }
