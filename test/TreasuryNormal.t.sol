@@ -27,7 +27,8 @@ contract TreasuryTest is Test {
         assertEq(address(treasury).balance, 0);
         
         hoax(alice,10e18);
-        address(treasury).call{value: 5e18}("");
+        (bool ok, )  = address(treasury).call{value: 5e18}("");
+        require(ok);
 
         assertEq(address(treasury).balance, 5e18);
     }
@@ -36,7 +37,8 @@ contract TreasuryTest is Test {
         assertEq(address(treasury).balance, 0);
         
         hoax(alice,10e18);
-        address(treasury).call{value: 5e18}("");
+        (bool ok, )  = address(treasury).call{value: 5e18}("");
+        require(ok);
 
         assertEq(address(treasury).balance, 5e18);
 
