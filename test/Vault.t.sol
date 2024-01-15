@@ -130,6 +130,40 @@ contract VaultTest is Test {
         assertEq(vault.totalAssets(),0);
     }
 
+    function testwithdrawAndRedeemOnbehalf() public {
+        // Redeem on behalf possible 
+        vm.startPrank(bob);
+        asset.approve(address(vault), 10e18);
+        
+        vault.deposit(10e18, bob);
+        
+        vault.approve(alice, 10e18);
+        vm.stopPrank();
+
+        vm.prank(alice);
+        vault.redeem(10e18, pranav, bob);
+
+        uint256 x = asset.balanceOf(pranav);
+        assertEq(x, 10e18);
+
+        // Withdraw on behalf wontwork 
+
+        // assertEq(asset.balanceOf(bob), 9999e19);
+        // vm.startPrank(bob);
+        // asset.approve(address(vault), 10e18);
+        
+        // vault.deposit(10e18, bob);
+        
+        // asset.approve(alice, 10e18);
+        // vm.stopPrank();
+
+        // uint256 y  = asset.allowance(bob, alice);
+        // assertEq(y, 10e18);
+
+        // vm.prank(alice);
+        // vault.withdraw(9e18, alice, bob);
+    }
+
     function testGlobalStateValues() public {
         assertEq(vault.asset(), address(asset));
         assertEq(vault.decimals(),18);
@@ -237,20 +271,41 @@ contract VaultTest is Test {
 
     function testdeposittokensinvault() public {
         vm.prank(bob);
-        asset8decimal.approve(address(vault), 100e8);
+        asset8decimal.approve(address(vault8), 100e8);
 
         vm.prank(bob);
-        vault8.deposit(10e8, bob);
+        vault8.deposit(100e8, bob);
+        
+        uint256 x = vault8.previewDeposit(100e8);
+        assertEq(x, 100e18);
     }
 
-    // function testSharesMint() public {
-    //     vm.prank(bob);
-    //     asset8decimal.approve(address(vault), 100e8);
+    function testSharesMint() public {
+        vm.prank(bob);
+        asset8decimal.approve(address(vault8), 100e8);
 
-    //     vm.prank(bob);
-    //     vault.deposit(100e8, bob);
+        vm.prank(bob);
+        vault8.deposit(100e8, bob);
 
-    //     uint256 x = vault.balanceOf(bob);
-    //     assertEq(x, 100e8);
-    // }
+        uint256 x = vault8.balanceOf(bob);
+        assertEq(x, 100e18);
+
+        assertEq(x, vault8.totalSupply());
+    }
+
+    function testWithdrawfunction() public {
+        vm.prank(bob);
+        asset8decimal.approve(address(vault8), 100e8);
+
+        vm.prank(bob);
+        vault8.deposit(100e8, bob);
+
+        vault8.convertToShares(100e8);
+        
+        vm.prank(bob);
+        vault8.withdraw(50e8, bob, bob);
+
+        vm.prank(bob);
+        vault8.redeem(5e19, bob,bob);
+    }
 }
