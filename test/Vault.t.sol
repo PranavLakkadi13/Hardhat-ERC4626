@@ -146,22 +146,25 @@ contract VaultTest is Test {
         uint256 x = asset.balanceOf(pranav);
         assertEq(x, 10e18);
 
-        // Withdraw on behalf wontwork 
+        // Withdraw on will work only if the vaultToken is approved to the caller, the caller can withdraw 
+        // funds on behalf of the owner or do whatever he wants with the approved funds 
 
-        // assertEq(asset.balanceOf(bob), 9999e19);
-        // vm.startPrank(bob);
-        // asset.approve(address(vault), 10e18);
+        // withdraw wont work if the asset tokens are approved to the caller 
+
+        assertEq(asset.balanceOf(bob), 9999e19);
+        vm.startPrank(bob);
+        asset.approve(address(vault), 10e18);
         
-        // vault.deposit(10e18, bob);
+        vault.deposit(10e18, bob);
         
-        // asset.approve(alice, 10e18);
-        // vm.stopPrank();
+        vault.approve(alice, 10e18);
+        vm.stopPrank();
 
-        // uint256 y  = asset.allowance(bob, alice);
-        // assertEq(y, 10e18);
+        uint256 y  = vault.allowance(bob, alice);
+        assertEq(y, 10e18);
 
-        // vm.prank(alice);
-        // vault.withdraw(9e18, alice, bob);
+        vm.prank(alice);
+        vault.withdraw(10e18, alice, bob);
     }
 
     function testGlobalStateValues() public {

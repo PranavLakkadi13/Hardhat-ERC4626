@@ -5,23 +5,21 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Treasury is Ownable {
-    address private i_owner;
 
     constructor () {
-        i_owner = msg.sender;
     }
 
     function withdraw() external {
-        require(msg.sender == i_owner);
+        require(msg.sender == owner());
 
-        (bool ok, ) = i_owner.call{value: address(this).balance }("");
+        (bool ok, ) = owner().call{value: address(this).balance }("");
         require(ok);
     }
 
-    function allowanceSpend(address _asset) external {
-        require(msg.sender == i_owner);
+    function allowanceSpend(address _asset , uint256 _amount) external {
+        require(msg.sender == owner(),"only owner can call this function");
 
-        IERC20(_asset).transfer(i_owner,IERC20(_asset).balanceOf(address(this)));
+        IERC20(_asset).transfer(owner(),_amount);
     }
 
     receive() external payable {}

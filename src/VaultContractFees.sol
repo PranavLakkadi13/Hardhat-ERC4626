@@ -101,13 +101,13 @@ abstract contract ERC4626Fees is ERC4626 {
 
 contract VaultWithFee is ERC4626Fees {
 
-
     address public owner;
     uint256 public entryFeeBasisPoints;
 
     constructor(IERC20Metadata _asset, uint256 _basisPoints, address _treasury) ERC4626(_asset) ERC20("Vault Token", "VLT") {
         owner = _treasury;
         entryFeeBasisPoints = _basisPoints;
+        
     } 
 
     // === Fee configuration ===
@@ -117,6 +117,14 @@ contract VaultWithFee is ERC4626Fees {
 
     function _exitFeeRecipient() internal view virtual override returns (address) {
         return owner; // replace with e.g. a treasury address
+    }
+
+    function _entryFeeRecipient() internal view virtual override returns (address) {
+        return owner; // replace with e.g. a treasury address
+    }
+
+    function _exitFeeBasisPoints() internal view virtual override returns (uint256) {
+        return entryFeeBasisPoints; // replace with e.g. 100 for 1%
     }
 
 }

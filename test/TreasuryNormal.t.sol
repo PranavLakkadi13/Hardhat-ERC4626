@@ -61,7 +61,7 @@ contract TreasuryTest is Test {
         asset.transfer(address(treasury), 10e18);
 
         assertEq(asset.balanceOf(bob), 100000e18 - 10e18);
-        treasury.allowanceSpend(address(asset));
+        treasury.allowanceSpend(address(asset),asset.balanceOf(address(treasury)));
 
         assertEq(treasury.owner(), bob);
         
