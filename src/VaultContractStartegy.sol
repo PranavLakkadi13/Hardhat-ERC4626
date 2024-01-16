@@ -101,14 +101,72 @@ abstract contract ERC4626Fees is ERC4626 {
 
 contract VaultWithFee is ERC4626Fees {
 
-    address public owner;
+    address public s_vaultoOwner;
     uint256 public entryFeeBasisPoints;
 
     constructor(IERC20Metadata _asset, uint256 _basisPoints, address _treasury) ERC4626(_asset) ERC20("Vault Token", "VLT") {
-        owner = _treasury;
+        s_vaultoOwner = _treasury;
         entryFeeBasisPoints = _basisPoints;
         
     } 
+
+    /** @dev See {IERC4262-deposit}. */
+    function deposit(uint256 assets, address receiver) public virtual override returns (uint256) {
+        require(assets <= maxDeposit(receiver), "ERC4626: deposit more than max");
+
+        uint256 shares = previewDeposit(assets);
+        _deposit(_msgSender(), receiver, assets, shares);
+
+        afterDeposit(assets);
+
+        return shares;
+    }
+
+    /** @dev See {IERC4262-mint}. */
+    function mint(uint256 shares, address receiver) public virtual override returns (uint256) {
+        require(shares <= maxMint(receiver), "ERC4626: mint more than max");
+
+        uint256 assets = previewMint(shares);
+        _deposit(_msgSender(), receiver, assets, shares);
+
+        afterDeposit(assets);
+
+        return assets;
+    }
+
+    /** @dev See {IERC4262-withdraw}. */
+    function withdraw(
+        uint256 assets,
+        address receiver,
+        address owner
+    ) public virtual override returns (uint256) {
+        require(assets <= maxWithdraw(owner), "ERC4626: withdraw more than max");
+
+        uint256 shares = previewWithdraw(assets);
+
+        beforeWithdraw(assets,shares);
+
+        _withdraw(_msgSender(), receiver, owner, assets, shares);
+
+        return shares;
+    }
+
+    /** @dev See {IERC4262-redeem}. */
+    function redeem(
+        uint256 shares,
+        address receiver,
+        address owner
+    ) public virtual override returns (uint256) {
+        require(shares <= maxRedeem(owner), "ERC4626: redeem more than max");
+
+        uint256 assets = previewRedeem(shares);
+
+        beforeWithdraw(assets,shares);
+
+        _withdraw(_msgSender(), receiver, owner, assets, shares);
+
+        return assets;
+    }
 
     // === Fee configuration ===
     function _entryFeeBasisPoints() internal view virtual override returns (uint256) {
@@ -116,11 +174,11 @@ contract VaultWithFee is ERC4626Fees {
     }
 
     function _exitFeeRecipient() internal view virtual override returns (address) {
-        return owner; // replace with e.g. a treasury address
+        return s_vaultoOwner; // replace with e.g. a treasury address
     }
 
     function _entryFeeRecipient() internal view virtual override returns (address) {
-        return owner; // replace with e.g. a treasury address
+        return s_vaultoOwner; // replace with e.g. a treasury address
     }
 
     function _exitFeeBasisPoints() internal view virtual override returns (uint256) {
@@ -135,6 +193,6 @@ contract VaultWithFee is ERC4626Fees {
 
     function afterDeposit(uint256 assets) internal virtual {
         uint256 interest = assets / 10;
-        SafeERC20.safeTransferFrom(IERC20(asset()),owner,address(this),interest);
+        SafeERC20.safeTransferFrom(IERC20(asset()),s_vaultoOwner,address(this),interest);
     }
 }
