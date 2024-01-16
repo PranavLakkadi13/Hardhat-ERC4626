@@ -22,7 +22,7 @@ contract VaultFeeTest is Test {
         vm.startPrank(bob);
         asset = new Asset();
         treasury = new Treasury();
-        vault = new VaultWithFee(asset,100,address(treasury));
+        vault = new VaultWithFee(asset,10,address(treasury));
         vm.stopPrank();
     }
 
@@ -92,7 +92,7 @@ contract VaultFeeTest is Test {
         assertTrue(vault.balanceOf(bob) > 0);
     }
 
-    function testRedeemTokensonbehalf() public {
+    function testRedeemTokensOnbehalf() public {
         vm.startPrank(bob);
         asset.approve(address(vault), 100e18);
     

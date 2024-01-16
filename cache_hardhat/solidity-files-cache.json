@@ -495,8 +495,8 @@
       ]
     },
     "/Users/pranavlakkadi/Codes/HH-FCC/HH-ERC-4636/src/Treasury.sol": {
-      "lastModificationDate": 1705268400393,
-      "contentHash": "64407e6103084a08b12a654d035dc7f9",
+      "lastModificationDate": 1705354957814,
+      "contentHash": "43628afee09705c029eacefdac49b61f",
       "sourceName": "src/Treasury.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -586,8 +586,8 @@
       ]
     },
     "/Users/pranavlakkadi/Codes/HH-FCC/HH-ERC-4636/src/VaultContractFees.sol": {
-      "lastModificationDate": 1705183398967,
-      "contentHash": "5667135f85a3747126dd92b2a211f1f0",
+      "lastModificationDate": 1705351054152,
+      "contentHash": "40f7d427096123ea1f6d6a383259e52f",
       "sourceName": "src/VaultContractFees.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -719,6 +719,52 @@
       ],
       "artifacts": [
         "Asset8Decimal"
+      ]
+    },
+    "/Users/pranavlakkadi/Codes/HH-FCC/HH-ERC-4636/src/VaultContractStartegy.sol": {
+      "lastModificationDate": 1705434907233,
+      "contentHash": "bc1d09bb0a4eb464c46491311a704c09",
+      "sourceName": "src/VaultContractStartegy.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC4626Fees",
+        "VaultWithFee"
       ]
     }
   }
