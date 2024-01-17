@@ -149,4 +149,22 @@ contract VaultFeeTest is Test {
 
         assertEq(x, asset.balanceOf(address(alice)));
     }
+    
+    function testCheckPreviewFunction() public view  {
+        uint256 x = vault.previewMint(100e18);
+        console.log("The vaule of shares minted " , x);
+        assert(x >= 100e18);
+
+        uint256 y = vault.previewDeposit(100e18);
+        assert(y <= 100e18);
+    }
+
+    function testTheGetterFunctions() public {
+        uint8 x = vault.decimals();
+        assert(x == 18);
+
+        string memory name = vault.name();
+        assertEq(name, "Vault Token");
+    }
+
 }
